@@ -36,7 +36,7 @@ public class Statistics {
         System.out.printf(" Загальна кiлькiсть втрачених (N_lost):            %d осiб%n\n", nLost);
         System.out.printf(" Середнiй час очiкування на Зупинцi 1 (W_avg1):    %.2f хв%n", wAvg1);
         System.out.printf(" Середнiй час очiкування на Зупинцi 2 (W_avg2):    %.2f хв%n", wAvg2);
-        System.out.printf(" iнтегральний середнiй час очiкування (W_avg):     %.2f хв%n\n", wAvgTotal);
+        System.out.printf(" Загальний середнiй час очiкування (W_avg):     %.2f хв%n\n", wAvgTotal);
         System.out.printf(" Середня довжина черги на Зупинцi 1 (L_q1,avg):    %.2f осiб%n", lq1Avg);
         System.out.printf(" Середня довжина черги на Зупинцi 2 (L_q2,avg):    %.2f осiб%n\n", lq2Avg);
         System.out.printf(" Денний фiнансовий результат (R_day):              %.2f грн%n\n", rDay);

@@ -1,0 +1,151 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam nodesep 50
+skinparam ranksep 60
+
+package "petrinet" {
+    class Main {
+        + static void main(String[] args)
+    }
+    class CapacityExperiment {
+        + static void main(String[] args)
+    }
+    class OptimizationExperiment {
+        + static void main(String[] args)
+    }
+    class WarmUpExperiment {
+        + static void main(String[] args)
+    }
+}
+
+package "petrinet.model" {
+    class BusRoutePetriNetModel {
+        + static PetriNetEngine buildModel()
+    }
+    class BusRouteCapacityModel {
+        + static PetriNetEngine buildModel(int capacityN, boolean debugLog)
+    }
+    class BusRouteOptimizationModel {
+        + static PetriNetEngine buildModel(int parameterK, boolean debugLog)
+    }
+}
+
+package "petrinet.engine" {
+    class PetriNetEngine {
+        - Map<String, Place> places
+        - List<Transition> transitions
+        - PriorityQueue<Event> eventQueue
+        - Random random
+        - double currentTime
+        + void addPlace(Place p)
+        + void addTransition(Transition t)
+        + Place getPlace(String id)
+        + void runSimulation(double maxTime)
+        + void runSimulation(double maxTime, double logStep, PrintWriter logWriter)
+        - void fireEnabledTransitions()
+        - void updateAllPlacesTime(double time)
+        + double getCurrentTime()
+    }
+
+    class Place {
+        - String id
+        - String name
+        - int tokens
+        - double areaUnderMarking
+        - double lastUpdateTime
+        + Place(String id, String name, int initialTokens)
+        + void updateTime(double currentTime)
+        + void addTokens(int count)
+        + void removeTokens(int count)
+        + int getTokens()
+        + double getAreaUnderMarking()
+    }
+
+    class Transition {
+        - String id
+        - String name
+        - int priority
+        - double meanDelay
+        - double devDelay
+        - int firingCount
+        - List<Arc> inArcs
+        - List<Arc> outArcs
+        + Transition(String id, String name, int priority, double mean, double dev)
+        + void addInArc(Place place, int weight)
+        + void addOutArc(Place place, int weight)
+        + boolean isEnabled()
+        + void consumeInputTokens()
+        + void produceOutputTokens()
+        + double generateDelay(Random random)
+    }
+
+    class SmartDepartureTransition {
+        - int busCapacity
+        - int minK
+        - boolean debugLog
+        - Queue<Integer> passengersInTransit
+        + isEnabled() : boolean
+        + consumeInputTokens() : void
+        + produceOutputTokens() : void
+    }
+
+    class Arc {
+        - int weight
+        + Arc(Place place, int weight)
+        + Place getPlace()
+        + int getWeight()
+    }
+
+    class Event {
+        ~ double time
+        + Event(double time, Transition transition)
+        + int compareTo(Event o)
+    }
+
+    class Statistics {
+        + static void printReport(PetriNetEngine engine)
+    }
+
+    class SimulationAnalyzer {
+        - static int errorCount
+        + static void validateTransitionFiring(Transition t, PetriNetEngine engine)
+        + static void printAnalysisReport()
+    }
+}
+
+' ================= РОЗТАШУВАННЯ ТА ЗВ'ЯЗКИ =================
+
+' Зв'язки ядра (PetriNetEngine та його компоненти)
+PetriNetEngine "1" *-- "*" Transition : містить >
+PetriNetEngine "1" *-- "*" Event : планує >
+PetriNetEngine "1" *-right- "*" Place : містить >
+
+Event "*" -right-> "1" Transition : викликає >
+
+' Розташування Transition, Arc та SmartDepartureTransition
+Transition "1" *-right- "*" Arc : inArcs / outArcs >
+Transition <|-right- SmartDepartureTransition
+
+Arc "*" -up-> "1" Place : посилається >
+
+' Приховані зв'язки для вирівнювання пустого простору
+Event -[hidden]right-> Arc
+SmartDepartureTransition -[hidden]up-> Place
+
+' Залежності класів моделі
+BusRoutePetriNetModel ..> PetriNetEngine : створює >
+BusRouteCapacityModel ..> PetriNetEngine : створює >
+BusRouteOptimizationModel ..> PetriNetEngine : створює >
+
+' Залежності точок входу
+Main ..> BusRoutePetriNetModel : використовує >
+Main ..> Statistics : генерує звіт >
+Main ..> SimulationAnalyzer : перевіряє >
+
+CapacityExperiment ..> BusRouteCapacityModel : використовує >
+OptimizationExperiment ..> BusRouteOptimizationModel : використовує >
+WarmUpExperiment ..> BusRoutePetriNetModel : використовує >
+
+@enduml

@@ -15,7 +15,7 @@ public class BusRoutePetriNetModel {
         // ---------------------------------------------------------------------
         Place p1  = new Place("P1",  "Готовнiсть генератора 1", 1);
         Place p2  = new Place("P2",  "Прибуття пасажира 1", 0);
-        Place p3  = new Place("P3",  "Вiльнi мiсця в черзi 1", SimulationConfig.QUEUE_CAPACITY_STOP_1 + 1);
+        Place p3  = new Place("P3",  "Вiльнi мiсця в черзi 1", SimulationConfig.QUEUE_CAPACITY_STOP_1);
         Place p4  = new Place("P4",  "Черга пасажирiв 1", 0);
         Place p5  = new Place("P5",  "Втраченi пасажири", 0);
         Place p6  = new Place("P6",  "Сiли в бус А на зупинцi 1", 0);
@@ -25,7 +25,7 @@ public class BusRoutePetriNetModel {
         Place p10 = new Place("P10", "Перевезено всього", 0);
         Place p11 = new Place("P11", "Вiльнi мiсця бус А на зупинцi 2", 0);
         Place p12 = new Place("P12", "Вiльнi мiсця бус В на зупинцi 2", 0);
-        Place p13 = new Place("P13", "Вiльнi мiсця в черзi 2", SimulationConfig.QUEUE_CAPACITY_STOP_2 + 1);
+        Place p13 = new Place("P13", "Вiльнi мiсця в черзi 2", SimulationConfig.QUEUE_CAPACITY_STOP_2);
         Place p14 = new Place("P14", "Черга пасажирiв 2", 0);
         Place p15 = new Place("P15", "Сiли в бус А на зупинцi 2", 0);
         Place p16 = new Place("P16", "Сiли в бус В на зупинцi 2", 0);
